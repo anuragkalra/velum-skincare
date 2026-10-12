@@ -61,16 +61,24 @@ h3 { font-size: 25px; font-weight: 500; letter-spacing: -.025em; line-height: 1.
 .section-heading .eyebrow { margin-bottom: 23px; }
 .section-intro { padding-bottom: 4px; max-width: 360px; line-height: 1.8; }
 .product-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 28px; }
-.product-image { display: block; position: relative; aspect-ratio: 4/5; overflow: hidden; background: #eae9e3; }
-.product-image img { object-fit: cover; transition: transform .6s ease; }
-.product-image:hover img { transform: scale(1.025); }
+.product { display: flex; flex-direction: column; min-width: 0; }
+.product-image { display: block; flex-shrink: 0; }
+/* These are visual framing adjustments to the photographed canvases, not physical dimensions.
+   Each product's contact point lands at approximately 88% of its equal 4:5 stage. */
+.catalog-stage { position: relative; aspect-ratio: 4/5; background: var(--color-chalk); isolation: isolate; }
+.catalog-01 { --catalog-scale: 90%; --catalog-offset: 5.6%; }
+.catalog-02 { --catalog-scale: 74%; --catalog-offset: 22.9%; }
+.catalog-03 { --catalog-scale: 78%; --catalog-offset: 22.7%; }
+.catalog-frame { position: absolute; width: var(--catalog-scale); height: var(--catalog-scale); left: calc((100% - var(--catalog-scale)) / 2); top: var(--catalog-offset); mix-blend-mode: darken; mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent), linear-gradient(to bottom, transparent, #000 4%, #000 95%, transparent); mask-composite: intersect; }
+.catalog-frame img { object-fit: contain; filter: brightness(1.035); }
+.product-image:hover .image-link .arrow { transform: translate(2px, -2px); }
 .product-index { position: absolute; top: 22px; left: 22px; font-size: 11px; letter-spacing: .08em; }
-.image-link { position: absolute; bottom: 16px; right: 16px; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--rule); }
+.image-link { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--rule); }
 .product-name { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; gap: 8px; }
 .product-name > span { font-size: 16px; }
 .product-details { display: flex; gap: 12px; justify-content: space-between; margin-top: 8px; font-size: 12px; }
 .product-details > span { white-space: nowrap; }
-.product-line { margin-top: 17px; color: #62666a; font-size: 15px; }
+.product-line { flex: 1; margin-top: 17px; color: #62666a; font-size: 15px; }
 .text-link { display: flex; justify-content: space-between; align-items: center; gap: 24px; border-bottom: 1px solid var(--rule); padding: 18px 0 14px; font-size: 12px; font-weight: 500; }
 .product .text-link { margin-top: 12px; }
 .philosophy { display: grid; grid-template-columns: 1fr 1fr; background: var(--color-frosted); }
@@ -88,8 +96,7 @@ h3 { font-size: 25px; font-weight: 500; letter-spacing: -.025em; line-height: 1.
 .step-heading { grid-column: 1/-1; display: flex; align-items: center; justify-content: space-between; padding-top: 22px; margin-bottom: 28px; }
 .step-number { font-family: var(--font-instrument),serif; font-size: 36px; line-height: 1; }
 .system-step:last-child .step-heading .arrow { visibility: hidden; }
-.step-image { position: relative; aspect-ratio: 4/5; }
-.step-image img { object-fit: cover; }
+.step-image { align-self: center; }
 .step-copy h3 { font-size: 22px; margin-bottom: 12px; }
 .step-copy p { font-size: 15px; line-height: 1.8; min-height: 162px; }
 .step-copy .text-link { font-size: 12px; gap: 8px; padding-bottom: 9px; }
@@ -120,6 +127,15 @@ h3 { font-size: 25px; font-weight: 500; letter-spacing: -.025em; line-height: 1.
 .footer-bottom { border-top: 1px solid #5a5c5d; margin: 72px auto 0; max-width: 1440px; padding-top: 24px; display: flex; justify-content: space-between; gap: 20px; color: var(--color-mineral); font-size: 10px; }
 .socials { display: flex; gap: 24px; }
 
+/* Give the desktop routine imagery its own generous row instead of a narrow text-side thumbnail. */
+@media (min-width: 1101px) {
+  .system-step { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; column-gap: 0; }
+  .step-image { width: 78%; max-width: 320px; justify-self: center; align-self: start; margin-bottom: 32px; }
+  .step-copy { align-self: stretch; display: flex; flex-direction: column; }
+  .step-copy p { min-height: 81px; flex: 1; }
+  .step-copy .text-link { margin-top: 8px; }
+}
+
 @media (min-width: 1600px) {
   .hero-copy { padding-left: calc((100vw - 1440px)/2); }
   .hero-caption, .closing-copy, .site-header, .footer { padding-inline: calc((100vw - 1440px)/2); }
@@ -134,9 +150,11 @@ h3 { font-size: 25px; font-weight: 500; letter-spacing: -.025em; line-height: 1.
   .philosophy-image { min-height: 680px; }
   .philosophy-copy { padding: 64px 36px; }
   .system-grid { gap: 24px; }
-  .system-step { grid-template-columns: 1fr; }
+  .system-step { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
   .step-image { width: 50%; margin-bottom: 24px; }
-  .step-copy p { min-height: 90px; }
+  .step-copy { align-self: stretch; display: flex; flex-direction: column; }
+  .step-copy p { min-height: 90px; flex: 1; }
+  .step-copy .text-link { margin-top: auto; }
   .footer-grid { gap: 32px; }
 }
 @media (max-width: 767px) {

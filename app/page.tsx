@@ -6,6 +6,14 @@ const products = [
   { number: "03", name: "SEAL", type: "Recovery Moisturizer", size: "50 mL", price: "$58", line: "Protection in its purest form.", image: "/images/seal.webp", alt: "VELUM SEAL low-profile frosted glass moisturizer jar with a brushed aluminum lid", routine: "Finish with a daily moisturizer concept designed to help retain hydration and soften the feeling of dryness." },
 ];
 
+function CatalogImage({ product, decorative = false, sizes }: {
+  product: (typeof products)[number];
+  decorative?: boolean;
+  sizes: string;
+}) {
+  return <span className="catalog-frame"><Image src={product.image} alt={decorative ? "" : product.alt} fill quality={85} sizes={sizes} /></span>;
+}
+
 function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="arrow"><path d={diagonal ? "M6 18 18 6M6 6h12v12" : "M4 12h15m-6-6 6 6-6 6"} stroke="currentColor" strokeWidth="1.25" /></svg>;
 }
@@ -42,7 +50,7 @@ export default function Home() {
         <div className="section-heading"><div><p className="eyebrow">01 / The collection</p><h2 id="collection-title">Three essentials.<br /><em>One considered routine.</em></h2></div><p className="section-intro">Designed to cleanse, strengthen, and protect.<br />Every element has a purpose.</p></div>
         <div className="product-grid">
           {products.map(product => <article className="product" key={product.number}>
-            <a className="product-image" href={`#step-${product.number}`} aria-label={`Discover ${product.name} in The System`}><Image src={product.image} alt={product.alt} fill quality={85} sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1599px) 30vw, 427px" /><span className="product-index" aria-hidden="true">{product.number} /</span><span className="image-link" aria-hidden="true"><Arrow diagonal /></span></a>
+            <a className={`product-image catalog-stage catalog-${product.number}`} href={`#step-${product.number}`} aria-label={`Discover ${product.name} in The System`}><CatalogImage product={product} sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1599px) 30vw, 427px" /><span className="product-index" aria-hidden="true">{product.number} /</span><span className="image-link" aria-hidden="true"><Arrow diagonal /></span></a>
             <div className="product-name"><h3>{product.name}</h3><span>{product.price}</span></div>
             <div className="product-details"><p>{product.type}</p><span>{product.size}</span></div>
             <p className="product-line">{product.line}</p>
@@ -61,7 +69,7 @@ export default function Home() {
         <ol className="system-grid">
           {products.map(product => <li id={`step-${product.number}`} className="system-step" key={product.number}>
             <div className="step-heading"><span className="step-number">{product.number}</span><Arrow /></div>
-            <div className="step-image"><Image src={product.image} alt="" fill quality={85} sizes="(max-width: 767px) 35vw, 180px" /></div>
+            <div className={`step-image catalog-stage catalog-${product.number}`}><CatalogImage product={product} decorative sizes="(max-width: 767px) 35vw, (max-width: 1100px) 14vw, (max-width: 1599px) 23vw, 320px" /></div>
             <div className="step-copy"><h3>{product.name}</h3><p>{product.routine}</p><a className="text-link" href="#collection">View in collection<Arrow /></a></div>
           </li>)}
         </ol>
