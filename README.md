@@ -1,6 +1,6 @@
 # VELUM — Made for the elements.
 
-A responsive homepage for a fictional premium skincare portfolio concept. Built with Next.js App Router, TypeScript, and Tailwind CSS. The intended future GitHub repository name is **velum-skincare**. No remote has been created or configured, and nothing has been pushed or deployed.
+A responsive homepage, collection page, and reusable product detail template for a fictional premium skincare portfolio concept. Built with Next.js App Router, TypeScript, and Tailwind CSS. The intended future GitHub repository name is **velum-skincare**. Development is local; this demo-bag task does not configure a remote, push changes, or deploy the site.
 
 ## Local development
 
@@ -16,6 +16,7 @@ Open http://127.0.0.1:3000. For a production preview, run `npm run build` follow
 ```sh
 npm run lint
 npm run typecheck
+npm run test:bag
 npm run build
 ```
 
@@ -25,13 +26,27 @@ npm run build
 
 The section sequence is Hero → Collection → Brand philosophy → The System → Closing editorial → Footer. Approved product order and prices are CLEANSE ($38), FORTIFY ($68), SEAL ($58). Manrope and Instrument Serif load through `next/font/google` and are served by Next.js; an internet connection is needed for the initial font download during the build.
 
-Shop and collection CTAs link to `#collection`. Product links lead to their numbered step in The System. The cart and newsletter are explicitly unavailable preview controls. Social profiles are marked coming soon. No checkout, product routes, authentication, payments, backend, or CMS are included. The conceptual product descriptions contain no clinical or certification claims. Search indexing is disabled for this fictional portfolio concept.
+Shop navigation and collection CTAs link to `/shop`. The collection page presents the complete CLEANSE → FORTIFY → SEAL catalog using shared product data, header, footer, and refined image framing. Product discovery links on the homepage and collection page lead to `/products/cleanse`, `/products/fortify`, and `/products/seal`. The System retains its numbered homepage anchors while its product links open the corresponding detail pages. The header bag opens a functional client-side demo drawer; the newsletter remains an unavailable preview control. Social profiles are marked coming soon. No checkout, authentication, payments, backend, or CMS are included. The conceptual product descriptions contain no clinical or certification claims. Search indexing is disabled for this fictional portfolio concept.
 
 The mobile hero stacks HTML text above the complete 16:9 photograph. All visible copy remains HTML. The layout supports keyboard navigation, visible focus, a skip link, and reduced motion.
 
+## Product detail scope
+
+All three products share one responsive template with catalog photography, product-specific titles and descriptions, concept-level benefits and usage guidance, native keyboard-accessible disclosures, related products, and a return link to the collection. Unknown product slugs return HTTP 404.
+
+Quantity accepts integers from 1 to 10. Add to Bag adds the selected quantity to the demo drawer, and the header bag shows the total unit count. Ingredients are explicitly marked as an unspecified concept placeholder. FORTIFY and SEAL offer distinct existing architectural views; CLEANSE has one catalog view without duplicate thumbnails. Each page includes the approved collection editorial photograph below the main product area. Dedicated close-up photography and final deployed QA remain pending.
+
+## Demo shopping bag
+
+A root `BagProvider` and shared client store keep the drawer available across routes. Repeated additions merge into one line per product in approved catalog order, capped at 10 units with a visible explanation. Shared integer-cent catalog prices determine line totals and subtotal. Native modal behavior, an explicit keyboard focus loop, Escape dismissal, focus restoration, and scroll locking protect background content while the drawer is open. The item list scrolls independently of the header and subtotal; mobile uses a full-width panel. Existing reduced-motion rules apply to the drawer animation.
+
+Only versioned product slugs and quantities are stored under `velum-demo-bag-v1` in localStorage. Stored data is validated; unknown products, invalid quantities, unsupported versions, and malformed JSON are ignored. Blocked storage and read/write failures retain a usable in-memory bag with a visible refresh-persistence explanation. No personal details are collected. The drawer and product controls explicitly state “Portfolio demo — checkout unavailable.” No payment or completed-purchase behavior exists.
+
+`npm run test:bag` uses the existing TypeScript dependency and Node test runner to check arithmetic, merging, quantity bounds, removals, persistence validation, storage access/read/write errors, and in-memory recovery. It writes compiled test modules to a temporary directory and removes them after the run.
+
 ## Creative source and image provenance
 
-`brand/BRAND_GUIDELINES.md` remains the approved source of truth and is preserved unchanged.
+`brand/BRAND_GUIDELINES.md` remains the approved source of truth and is preserved unchanged. The website repository is `velum-skincare`; original source paths in the table below refer to the separate sibling `skincare-portfolio` creative workspace.
 
 Only these six optimized WebP copies are served:
 
@@ -48,19 +63,23 @@ Copies retain original dimensions and are encoded with Pillow WebP quality 86, m
 
 ## Proposed tracked inventory
 
-- `.gitignore`
-- `app/globals.css`, `app/layout.tsx`, `app/page.tsx`
+- `.gitignore`, `AGENTS.md`
+- `app/globals.css`, `app/layout.tsx`, `app/page.tsx`, `app/shop/page.tsx`, `app/products/[slug]/page.tsx`, `app/not-found.tsx`
+- Shared UI under `app/components/` and catalog, quantity, cart, and storage logic under `app/lib/`
+- `scripts/check-bag.mjs` and `tests/bag.test.mjs`
 - `eslint.config.mjs`, `next.config.ts`, `postcss.config.mjs`, `tsconfig.json`
 - `package.json`, `package-lock.json`, `README.md`
 - `brand/BRAND_GUIDELINES.md`
 - The six optimized WebP files listed above under `public/images/`
 
-The local repository is initialized on `main` without a commit or remote. Preview screenshots are local artifacts under ignored `qa/`; they are excluded from the proposed tracked inventory.
+Git tracking is limited to website code, configuration, documentation, the approved brand guidelines, and optimized website imagery. Preview screenshots are local artifacts under ignored `qa/`; they are excluded from the proposed tracked inventory.
 
 ## Verification notes
 
-Lint (zero warnings), TypeScript, and the production build passed. Browser QA covered 320, 390, 768, 1024, and 1440 px widths, image crops, all fragment targets, collection/product anchor navigation, visible keyboard focus, and the skip link. Reduced-motion CSS was verified in the rendered stylesheet; live OS preference emulation is not exposed by the preview browser. No browser console errors were observed.
+Demo bag verification: lint, typecheck, production build, and 11 focused cart/storage regression tests passed. Browser checks covered 1440, 768, and 390 px, plus a 390 × 640 scrolling case. Verified all product additions, selected quantities, duplicate merging, 1–10 bounds, removals and empty state, unit count, line/subtotal arithmetic ($338.00 for 2 CLEANSE + 3 FORTIFY + 1 SEAL), route/refresh persistence, modal keyboard containment, Escape/backdrop dismissal, focus restoration, locked background scrolling, loaded images, and no horizontal overflow. No hydration or console errors were observed. Storage faults and malformed payloads were verified through automated fault injection into the production cart/storage functions and store, rather than changing browser settings. Populated drawer captures are under ignored `qa/bag/`.
+
+Lint (zero warnings), TypeScript, and the production build passed. Browser QA covered 320, 390, 768, 1024, and 1440 px widths, image crops, all fragment targets, collection and product navigation, visible keyboard focus, and the skip link. Reduced-motion CSS was verified in the rendered stylesheet; live OS preference emulation is not exposed by the preview browser. No browser console errors were observed. The collection route `/shop` was also reviewed at 1440, 768, and 390 px, including image loading, overflow, keyboard focus, and navigation to the homepage, philosophy, system, and all three numbered routine steps. The product pages were reviewed at 1440, 768, and 390 px, including direct loading, distinct gallery views, keyboard-operated disclosures and focus, quantity bounds and invalid input, the previous preview shopping controls, related navigation, image loading, and horizontal overflow. All three product routes return HTTP 200; an unknown product slug returns HTTP 404.
 
 Production dependencies report zero npm audit vulnerabilities. The full audit reports five development-only findings in the Next.js ESLint configuration chain, rooted in `braces` (GHSA-vfj7-8cjw-p6xm); no patched current release was available at verification. ESLint 9 is retained for compatibility with the Next.js lint plugins, which do not yet all accept ESLint 10.
 
-All 19 pre-existing local files were hash-checked and are unchanged. No synced ChatGPT Project `sources/` files were edited.
+Original photography, optimized serving images, and approved brand guidelines were hash-checked and remain unchanged. The prior homepage, collection, and PDP styles are preserved; drawer styles are appended. No synced ChatGPT Project `sources/` files were edited.

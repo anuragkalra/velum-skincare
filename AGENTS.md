@@ -1,0 +1,12 @@
+# VELUM repository conventions
+
+VELUM is a fictional premium skincare portfolio concept demonstrating web-design capability to prospective freelance clients.
+
+- Treat `brand/BRAND_GUIDELINES.md` as the approved creative source of truth. Preserve established layouts, Manrope/Instrument Serif typography, Chalk/Graphite palette, and refined catalog scale, grounding, packaging, and shadows.
+- Keep exactly three products in order: 01 CLEANSE — Gentle Cream Cleanser, 150 mL, $38; 02 FORTIFY — Barrier Support Serum, 30 mL, $68; 03 SEAL — Recovery Moisturizer, 50 mL, $58. Reuse `app/lib/products.ts` and the 1–10 bounds in `app/lib/quantity.ts`.
+- Follow the existing Next.js App Router, TypeScript, and Tailwind CSS setup. Routes live under `app/`; shared UI lives under `app/components/`; existing design tokens and component styles live in `app/globals.css`. Reuse shared components and product data before introducing new patterns.
+- Preserve the homepage section order, `/shop`, and `/products/[slug]` template. Prioritize responsive layouts, accessible interactions, consistent photography, and clear shopping behavior. Keep the fictional portfolio disclosure visible.
+- Original photography, references, and archives belong in sibling `../skincare-portfolio/`. Preserve those originals. Only necessary optimized website assets belong in `public/images/`; do not use superseded FORTIFY editorial packaging or archived images. Keep dependencies, generated outputs, local secrets, and `qa/` captures ignored.
+- Keep claims conceptual. Do not invent clinical evidence, reviews, certifications, or ingredients. Payments, authentication, CMS, and backend services are outside the current scope. Demo shopping must clearly disclose that checkout is unavailable.
+- Use the existing commands: `npm run dev` for local development; `npm run lint`, `npm run typecheck`, and `npm run build` for relevant verification; `npm run test:bag` for cart/storage regression tests; `npm start` for a production preview at http://127.0.0.1:3000. Next.js generates route types: on a fresh checkout, run the build before the standalone typecheck. Review affected layouts and interactions in the browser and distinguish verified results from assumptions in completion reports.
+- Dedicated close-up photography and final deployed QA remain pending until actually completed. Commit, push, and deploy only when explicitly requested.
